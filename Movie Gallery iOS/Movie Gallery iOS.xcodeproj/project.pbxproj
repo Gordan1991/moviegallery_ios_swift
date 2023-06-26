@@ -16,6 +16,8 @@
 		8A2B564D2A46B11100366382 /* Movie_Gallery_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2B564C2A46B11100366382 /* Movie_Gallery_iOSTests.swift */; };
 		8A2B56572A46B11100366382 /* Movie_Gallery_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2B56562A46B11100366382 /* Movie_Gallery_iOSUITests.swift */; };
 		8A2B56592A46B11100366382 /* Movie_Gallery_iOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2B56582A46B11100366382 /* Movie_Gallery_iOSUITestsLaunchTests.swift */; };
+		8AA382A72A49C01F00429905 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA382A62A49C01F00429905 /* Constants.swift */; };
+		8AA382A92A49C10F00429905 /* MovieModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA382A82A49C10F00429905 /* MovieModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		8A2B56522A46B11100366382 /* Movie Gallery iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Movie Gallery iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A2B56562A46B11100366382 /* Movie_Gallery_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie_Gallery_iOSUITests.swift; sourceTree = "<group>"; };
 		8A2B56582A46B11100366382 /* Movie_Gallery_iOSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie_Gallery_iOSUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		8AA382A62A49C01F00429905 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		8AA382A82A49C10F00429905 /* MovieModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,13 +103,18 @@
 		8A2B56342A46B10F00366382 /* Movie Gallery iOS */ = {
 			isa = PBXGroup;
 			children = (
+				8AA382A52A49BF9400429905 /* Controller */,
+				8AA382A42A49BF8900429905 /* ViewModels */,
+				8AA382A32A49BF8000429905 /* Views */,
+				8AA382A22A49BF7600429905 /* Models */,
+				8AA382A12A49BF4300429905 /* Api */,
 				8A2B56352A46B10F00366382 /* AppDelegate.swift */,
 				8A2B56372A46B10F00366382 /* SceneDelegate.swift */,
-				8A2B56392A46B10F00366382 /* ViewController.swift */,
 				8A2B563B2A46B10F00366382 /* Main.storyboard */,
 				8A2B563E2A46B11100366382 /* Assets.xcassets */,
 				8A2B56402A46B11100366382 /* LaunchScreen.storyboard */,
 				8A2B56432A46B11100366382 /* Info.plist */,
+				8AA382A62A49C01F00429905 /* Constants.swift */,
 			);
 			path = "Movie Gallery iOS";
 			sourceTree = "<group>";
@@ -125,6 +134,43 @@
 				8A2B56582A46B11100366382 /* Movie_Gallery_iOSUITestsLaunchTests.swift */,
 			);
 			path = "Movie Gallery iOSUITests";
+			sourceTree = "<group>";
+		};
+		8AA382A12A49BF4300429905 /* Api */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Api;
+			sourceTree = "<group>";
+		};
+		8AA382A22A49BF7600429905 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8AA382A82A49C10F00429905 /* MovieModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8AA382A32A49BF8000429905 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		8AA382A42A49BF8900429905 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		8AA382A52A49BF9400429905 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				8A2B56392A46B10F00366382 /* ViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,6 +305,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A2B563A2A46B10F00366382 /* ViewController.swift in Sources */,
+				8AA382A72A49C01F00429905 /* Constants.swift in Sources */,
+				8AA382A92A49C10F00429905 /* MovieModel.swift in Sources */,
 				8A2B56362A46B10F00366382 /* AppDelegate.swift in Sources */,
 				8A2B56382A46B10F00366382 /* SceneDelegate.swift in Sources */,
 			);
