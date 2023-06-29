@@ -9,62 +9,100 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var data: [String] = []
+    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var loadingBar: UIActivityIndicatorView!
+    @IBOutlet weak var tableView: UITableView!
+    var data = [Result]()
+    let apiService = ApiService()
+    var searchMovie = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        loadingBar.style = .large
+        loadingBar.startAnimating()
         
-        fetchDataFromApi()
-        
+        apiService.getAllMoviePopularData(){ result in
+            print("response json data: \(result.results)")
+            self.data = result.results!
+            DispatchQueue.main.sync {
+                self.loadingBar.stopAnimating()
+                self.loadingBar.hidesWhenStopped=true
+                self.tableView.reloadData()
+            }
+        }
     }
     
-    func fetchDataFromApi(){
-        // Define the API endpoint URL
-               guard let url = URL(string: "https://api.themoviedb.org/3/discover/movie") else {
-                   return
-               }
+    
+    @IBAction func searchBtnClick(_ sender: Any) {
         
-        let headers = [
-          "accept": "application/json",
-          "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0MmM5ZjJmMjBmZThjNzIzOTJmOTZjNjQwYzVjOGQ5YSIsInN1YiI6IjY0OTVhNTEzZDVmZmNiMDBhZDg1MDY3OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.8fUCYS4ohl34KdhUlD29BC6gqNtsXUILoMb2tEf9fH0"
-        ]
-
-        let request = NSMutableURLRequest(url: NSURL(string: "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc")! as URL,
-                                                cachePolicy: .useProtocolCachePolicy,
-                                            timeoutInterval: 10.0)
-        request.httpMethod = "GET"
-        request.allHTTPHeaderFields = headers
-
-        let session = URLSession.shared
-        let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
-          if (error != nil) {
-            print(error as Any)
-          } else {
-              var result: Response?
-              
-              do{
-                  result = try JSONDecoder().decode(Response.self, from: data!)
-              }catch{
-                  print("failed to convert \(error.localizedDescription)")
-              }
-              
-              guard let json = result else{
-                  return
-              }
-              
-              json.results.forEach { data in
-                  print("response json data: \(data.original_title)")
-
-              }
-
-          }
-        })
-
-        dataTask.resume()
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "SearchMovieViewController") as? SearchMovieViewController{
+            vc.searchMovie = searchMovie
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
-
-
+    
 }
 
+extension ViewController: UITableViewDelegate,UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 150
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let movieResult = data[indexPath.row]
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "MovieDetailViewController") as? MovieDetailViewController{
+            vc.movieId = movieResult.id ?? 0
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return data.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! MovieTableViewCell
+        cell.lblMovieTitle.text = data[indexPath.row].title
+        cell.lblMovieTitle.font = .boldSystemFont(ofSize: 17)
+        cell.lblMovieReleaseDate.text = "Release Date: " + (data[indexPath.row].release_date ?? "")
+        cell.ivMovieImg.downloaded(from: "https://image.tmdb.org/t/p/w500/" + (data[indexPath.row].poster_path ?? ""),contentMode: .scaleAspectFit)
+        return cell
+    }
+}
+
+
+extension UIImageView{
+    func downloaded(from url: URL, contentMode mode: ContentMode = .scaleAspectFit){
+        contentMode = mode
+        
+        URLSession.shared.dataTask(with: url){data, response, error in
+            guard
+                let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
+                let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
+                let data = data, error == nil,
+                let image = UIImage(data: data)
+                else {return}
+            DispatchQueue.main.async { [weak self] in
+                self?.image = image
+            }
+            
+        }.resume();
+    }
+    
+    func downloaded(from link:String, contentMode mode: ContentMode = .scaleAspectFit){
+        guard let url = URL(string: link) else {return}
+        downloaded(from: url,contentMode: mode)
+        
+    }
+}
+
+extension ViewController:UISearchBarDelegate{
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchMovie = searchText;
+        
+        //print("searchBar data: \(searchText)")
+    }
+}
 
